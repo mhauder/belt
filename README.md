@@ -13,6 +13,11 @@ In other domains the tool can be called UX Belt, Security Belt, Process Belt etc
 
 ![alt text](images/overview.png "Overview of the conceptual model of the belt")
 
+In line with the agile approach agile teams are owners of the product/software and decide on the level of
+maturity or belt they want to achieve, however overarching enterprise architects, security and UX 
+experts can provide enterprise wide (global optimum) guidelines. Agile teams are also able to contribute
+guidelines and best practices based on their practical experience. 
+
 ## Run the application 
 
 ### Client 
