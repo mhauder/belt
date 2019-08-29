@@ -10,14 +10,14 @@ import (
 	"github.com/mhauder/belt/server/types"
 )
 
-type todoStruct struct {
-	NAME        string `json:"name"`
-	DESCRIPTION string `json:"description"`
+type guidelineStruct struct {
+	TITLE       string `json:"name"`
+	DESCRIPTION string `json:"title"`
 }
 
-var GetNotTodos = &graphql.Field{
-	Type:        graphql.NewList(types.NotTodo),
-	Description: "Get all not todos",
+var GetGuidelines = &graphql.Field{
+	Type:        graphql.NewList(types.Guideline),
+	Description: "Get all guidelines",
 	Resolve: func(params graphql.ResolveParams) (interface{}, error) {
 
 		notTodoCollection := mongo.Client.Database("medium-app").Collection("Not_Todos")
@@ -27,7 +27,7 @@ var GetNotTodos = &graphql.Field{
 		if err != nil {
 			panic(err)
 		}
-		var todosList []todoStruct
+		var guidelineList []guidelineStruct
 		for todos.Next(context.Background()) {
 			keys, err := todos.Current.Elements()
 
@@ -35,22 +35,22 @@ var GetNotTodos = &graphql.Field{
 				panic(err)
 			}
 
-			todo := todoStruct{}
+			todo := guidelineStruct{}
 			for _, key := range keys {
 				keyString := key.Key()
 				valueString := key.Value().String()
 
 				switch keyString {
-				case "name":
-					todo.NAME = valueString
+				case "title":
+					todo.TITLE = valueString
 				case "description":
 					todo.DESCRIPTION = valueString
 				default:
 				}
 			}
-			todosList = append(todosList, todo)
+			guidelineList = append(guidelineList, todo)
 		}
 
-		return todosList, nil
+		return guidelineList, nil
 	},
 }

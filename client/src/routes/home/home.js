@@ -1,85 +1,91 @@
 import React from 'react'
-import { gql } from 'apollo-boost';
-import { graphql, compose } from 'react-apollo';
+import {gql} from 'apollo-boost';
+import {compose, graphql} from 'react-apollo';
 
 // example of a query
 const query = gql`
-  query GetNotTodos{
-    getNotTodos {
-      name
+  query GetGuidelines{
+    getGuidelines {
+      title
       description
     }
   }
-`
+`;
 
 // example of a graphql mutation
 const mutation = gql`
-  mutation CreateNotTodo($name: String, $description: String) {
-    createNotTodo(name: $name, description: $description) {
-      name
+  mutation CreateGuideline($title: String, $description: String) {
+    createGuideline(title: $title, description: $description) {
+      title
     }
   }
-`
+`;
 
-// querries run automatically!
+// queries run automatically!
 @compose(
-  graphql(query),
-  graphql(mutation)
+    graphql(query),
+    graphql(mutation)
 )
 class Home extends React.Component {
-  constructor(props) {
-    super(props)
+    constructor(props) {
+        super(props);
 
-    this.state = {
-      name: '',
-      description: ''
+        this.state = {
+            title: '',
+            description: ''
+        }
     }
-  }
 
-  onChange = event => {
-    this.setState({ [event.target.name]: event.target.value})
-  }
+    onChange = event => {
+        this.setState({[event.target.name]: event.target.value})
+    };
 
-  save = () => {
-    this.props.mutate({
-      variables: {
-        name: this.state.name,
-        description: this.state.description
-      },
-      refetchQueries: ['GetNotTodos']
-    })
-  }
+    save = () => {
+        this.props.mutate({
+            variables: {
+                title: this.state.title,
+                description: this.state.description
+            },
+            refetchQueries: ['GetGuidelines']
+        })
+    };
 
-  render() {
-    const { getNotTodos = [] } = this.props.data
-    return (
-      
-      <div style={{display: 'flex', justifyContent:'center', marginTop: '10%'}} >
-        <div style={{display: 'flex', flexDirection:'column'}}>
-          <h3 style={{margin: '0px'}}>Add something to not do!</h3>
-          <input placeholder='Name' name='name' onChange={this.onChange} />
-          <input placeholder='Description' name='description' onChange={this.onChange} />
-          <button onClick={this.save}>Save</button>
-        </div>
+    render() {
+        const {getGuidelines = []} = this.props.data;
+        return (
 
-        <table style={{border:'1px solid black'}}>
-          <tr>
-            <th style={{border:'1px solid black'}}>name</th>
-            <th style={{border:'1px solid black'}}>description</th>                
-          </tr>
-         {
-           getNotTodos.map(notTodo => (
-             <tr>
-               <td style={{border:'1px solid black'}}>{notTodo.name}</td>
-               <td style={{border:'1px solid black'}}>{notTodo.description}</td>
-             </tr>
-            ))
-          }
-        </table>
+            <div style={{display: 'inline', justifyContent: 'center', marginTop: '5%'}}>
+                <div style={{display: 'inline', flexDirection: 'center'}}>
+                    <h3 style={{margin: '0px'}}>Add new guideline!</h3>
+                    <input placeholder='Title' name='title' onChange={this.onChange}/><br/>
+                    <input placeholder='Description' name='description' onChange={this.onChange}/><br/>
+                    <button onClick={this.save}>Save</button>
+                    <br/>
+                </div>
+                <br/>
 
-      </div>
-    )
-  }
+                <table style={{border: '1px solid black'}}>
+                    <tbody>
+                    <tr>
+                        <th style={{border: '1px solid black'}}>index</th>
+                        <th style={{border: '1px solid black'}}>title</th>
+                        <th style={{border: '1px solid black'}}>description</th>
+                    </tr>
+                    {
+                        getGuidelines.map((notTodo, index) => (
+                            <tr key={index}>
+                                <td style={{border: '1px solid black'}}>{index}</td>
+                                <td style={{border: '1px solid black'}}>{notTodo.title}</td>
+                                <td style={{border: '1px solid black'}}>{notTodo.description}</td>
+                            </tr>
+                        ))
+                    }
+                    </tbody>
+                </table>
+
+            </div>
+        )
+    }
 }
 
 export default Home
